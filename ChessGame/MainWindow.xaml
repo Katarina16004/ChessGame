@@ -28,167 +28,165 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <!-- Black Pieces -->
-        <Button Name="Button00" Grid.Row="0" Grid.Column="0" Background="white">
+        <Button Name="Button00" Grid.Row="0" Grid.Column="0" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_top.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button01" Grid.Row="0" Grid.Column="1" Background="#FFFC8EDF">
+        <Button Name="Button01" Grid.Row="0" Grid.Column="1" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_konj.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button02" Grid.Row="0" Grid.Column="2" Background="white">
+        <Button Name="Button02" Grid.Row="0" Grid.Column="2" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_lovac.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button03" Grid.Row="0" Grid.Column="3" Background="#FFFC8EDF">
+        <Button Name="Button03" Grid.Row="0" Grid.Column="3" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crna_kraljica.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button04" Grid.Row="0" Grid.Column="4" Background="white">
+        <Button Name="Button04" Grid.Row="0" Grid.Column="4" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_kralj.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button05" Grid.Row="0" Grid.Column="5" Background="#FFFC8EDF">
+        <Button Name="Button05" Grid.Row="0" Grid.Column="5" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_lovac.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button06" Grid.Row="0" Grid.Column="6" Background="white">
+        <Button Name="Button06" Grid.Row="0" Grid.Column="6" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_konj.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button07" Grid.Row="0" Grid.Column="7" Background="#FFFC8EDF">
+        <Button Name="Button07" Grid.Row="0" Grid.Column="7" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_top.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
 
-        <Button Name="Button10" Grid.Row="1" Grid.Column="0" Background="#FFFC8EDF">
+        <Button Name="Button10" Grid.Row="1" Grid.Column="0" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button11" Grid.Row="1" Grid.Column="1" Background="white">
+        <Button Name="Button11" Grid.Row="1" Grid.Column="1" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button12" Grid.Row="1" Grid.Column="2" Background="#FFFC8EDF">
+        <Button Name="Button12" Grid.Row="1" Grid.Column="2" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button13" Grid.Row="1" Grid.Column="3" Background="white">
+        <Button Name="Button13" Grid.Row="1" Grid.Column="3" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button14" Grid.Row="1" Grid.Column="4" Background="#FFFC8EDF">
+        <Button Name="Button14" Grid.Row="1" Grid.Column="4" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button15" Grid.Row="1" Grid.Column="5" Background="white">
+        <Button Name="Button15" Grid.Row="1" Grid.Column="5" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button16" Grid.Row="1" Grid.Column="6" Background="#FFFC8EDF">
+        <Button Name="Button16" Grid.Row="1" Grid.Column="6" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button17" Grid.Row="1" Grid.Column="7" Background="white">
+        <Button Name="Button17" Grid.Row="1" Grid.Column="7" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/crni_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
 
-        <!-- White Pieces -->
-        <Button Name="Button60" Grid.Row="6" Grid.Column="0" Background="white">
+        <Button Name="Button60" Grid.Row="6" Grid.Column="0" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button61" Grid.Row="6" Grid.Column="1" Background="#FFFC8EDF">
+        <Button Name="Button61" Grid.Row="6" Grid.Column="1" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button62" Grid.Row="6" Grid.Column="2" Background="white">
+        <Button Name="Button62" Grid.Row="6" Grid.Column="2" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button63" Grid.Row="6" Grid.Column="3" Background="#FFFC8EDF">
+        <Button Name="Button63" Grid.Row="6" Grid.Column="3" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button64" Grid.Row="6" Grid.Column="4" Background="white">
+        <Button Name="Button64" Grid.Row="6" Grid.Column="4" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button65" Grid.Row="6" Grid.Column="5" Background="#FFFC8EDF">
+        <Button Name="Button65" Grid.Row="6" Grid.Column="5" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button66" Grid.Row="6" Grid.Column="6" Background="white">
+        <Button Name="Button66" Grid.Row="6" Grid.Column="6" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button67" Grid.Row="6" Grid.Column="7" Background="#FFFC8EDF">
+        <Button Name="Button67" Grid.Row="6" Grid.Column="7" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_pijun.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
 
-        <Button Name="Button70" Grid.Row="7" Grid.Column="0" Background="#FFFC8EDF">
+        <Button Name="Button70" Grid.Row="7" Grid.Column="0" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_top.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button71" Grid.Row="7" Grid.Column="1" Background="white">
+        <Button Name="Button71" Grid.Row="7" Grid.Column="1" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_konj.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button72" Grid.Row="7" Grid.Column="2" Background="#FFFC8EDF">
+        <Button Name="Button72" Grid.Row="7" Grid.Column="2" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_lovac.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button73" Grid.Row="7" Grid.Column="3" Background="white">
+        <Button Name="Button73" Grid.Row="7" Grid.Column="3" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/bela_kraljica.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button74" Grid.Row="7" Grid.Column="4" Background="#FFFC8EDF">
+        <Button Name="Button74" Grid.Row="7" Grid.Column="4" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_kralj.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button75" Grid.Row="7" Grid.Column="5" Background="white">
+        <Button Name="Button75" Grid.Row="7" Grid.Column="5" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_lovac.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button76" Grid.Row="7" Grid.Column="6" Background="#FFFC8EDF">
+        <Button Name="Button76" Grid.Row="7" Grid.Column="6" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_konj.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
-        <Button Name="Button77" Grid.Row="7" Grid.Column="7" Background="white">
+        <Button Name="Button77" Grid.Row="7" Grid.Column="7" Background="white" Click="Button_Click">
             <Button.Content>
                 <Image Source="Resources/Figure/beli_top.png" Width="50" Height="50"/>
             </Button.Content>
