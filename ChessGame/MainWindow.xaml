@@ -45,7 +45,7 @@
         </Button>
         <Button Name="Button03" Grid.Row="0" Grid.Column="3" Background="#FFFC8EDF" Click="Button_Click">
             <Button.Content>
-                <Image Source="Resources/Figure/crna_kraljica.png" Width="50" Height="50"/>
+                <Image Source="Resources/Figure/crni_kraljica.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
         <Button Name="Button04" Grid.Row="0" Grid.Column="4" Background="white" Click="Button_Click">
@@ -168,7 +168,7 @@
         </Button>
         <Button Name="Button73" Grid.Row="7" Grid.Column="3" Background="white" Click="Button_Click">
             <Button.Content>
-                <Image Source="Resources/Figure/bela_kraljica.png" Width="50" Height="50"/>
+                <Image Source="Resources/Figure/beli_kraljica.png" Width="50" Height="50"/>
             </Button.Content>
         </Button>
         <Button Name="Button74" Grid.Row="7" Grid.Column="4" Background="#FFFC8EDF" Click="Button_Click">

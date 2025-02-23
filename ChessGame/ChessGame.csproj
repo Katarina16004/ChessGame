@@ -9,28 +9,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Figure\bela_kraljica.png" />
     <None Remove="Resources\Figure\beli_konj.png" />
     <None Remove="Resources\Figure\beli_kralj.png" />
+    <None Remove="Resources\Figure\beli_kraljica.png" />
     <None Remove="Resources\Figure\beli_lovac.png" />
     <None Remove="Resources\Figure\beli_pijun.png" />
     <None Remove="Resources\Figure\beli_top.png" />
-    <None Remove="Resources\Figure\crna_kraljica.png" />
     <None Remove="Resources\Figure\crni_konj.png" />
     <None Remove="Resources\Figure\crni_kralj.png" />
+    <None Remove="Resources\Figure\crni_kraljica.png" />
     <None Remove="Resources\Figure\crni_lovac.png" />
     <None Remove="Resources\Figure\crni_pijun.png" />
     <None Remove="Resources\Figure\crni_top.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Figure\bela_kraljica.png" />
+    <Resource Include="Resources\Figure\beli_kraljica.png" />
     <Resource Include="Resources\Figure\beli_konj.png" />
     <Resource Include="Resources\Figure\beli_kralj.png" />
     <Resource Include="Resources\Figure\beli_lovac.png" />
     <Resource Include="Resources\Figure\beli_pijun.png" />
     <Resource Include="Resources\Figure\beli_top.png" />
-    <Resource Include="Resources\Figure\crna_kraljica.png" />
+    <Resource Include="Resources\Figure\crni_kraljica.png" />
     <Resource Include="Resources\Figure\crni_konj.png" />
     <Resource Include="Resources\Figure\crni_kralj.png" />
     <Resource Include="Resources\Figure\crni_lovac.png" />

@@ -19,12 +19,11 @@ namespace ChessGame
     {
         private Button[,] tabla = new Button[8, 8];
         private Figura[,] tablaFigura = new Figura[8, 8];
+        private List<(int, int)> poslednjaObojenaPolja = new List<(int, int)>();
+        private Figura poslednjaFigura = null; // poslednja izabrana
         public MainWindow()
         {
             InitializeComponent();
-            string[] crneFigure = { "crni_top.png", "crni_konj.png", "crni_lovac.png", "crna_kraljica.png", "crni_kralj.png", "crni_pijun.png" };
-            string[] beleFigure = { "beli_top.png", "beli_konj.png", "beli_lovac.png", "bela_kraljica.png", "beli_kralj.png", "beli_pijun.png" };
-
 
             for (int i = 0; i < 8; i++)
             {
@@ -104,10 +103,74 @@ namespace ChessGame
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            if (button.Content as Image !=null)
+            int red = Grid.GetRow(button);
+            int kolona = Grid.GetColumn(button);
+            Figura polje = tablaFigura[red, kolona];
+            if (polje != null) // ako je kliknuto na figuru
             {
-                MessageBox.Show("Kliknuto na figuru");
+                // prikazivanje moguceg kretanja
+                ResetujBoje();
+                poslednjaFigura = polje;
+                poslednjaObojenaPolja.Clear();
+                poslednjaFigura.Red = red;
+                poslednjaFigura.Kolona = kolona;
+                
+                //MessageBox.Show($"{red}{kolona} dugme");
+                //MessageBox.Show($"{poslednjaFigura.GetSlika()} se nalazi na {poslednjaFigura.Red} redu i {poslednjaFigura.Kolona} koloni");
+               
+                List<(int, int)> moguciPotezi = poslednjaFigura.MoguciPotezi(tablaFigura);
+
+                foreach (var (r, k) in moguciPotezi)
+                {
+                    if (tablaFigura[r, k] == null)
+                    {
+                        tabla[r, k].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("lightBlue"));
+                    }
+                    else
+                    {
+                        tabla[r, k].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("red"));
+                    }
+                    poslednjaObojenaPolja.Add((r, k));
+                }
             }
+            else  // ako je null, znaci da je polje na koje treba da se skoci ili da je prazno polje
+            {
+                if(poslednjaFigura!=null) // ako smo pre toga kliknuli na neku figuru, znaci da zelimo da je pomerimo na to polje koje smo kliknuli
+                {
+                    //proveravamo da li je polje validno
+                    if(poslednjaFigura.ValidanPotez(red,kolona,tablaFigura))
+                    {
+                        tablaFigura[red, kolona] = poslednjaFigura;
+                        tablaFigura[poslednjaFigura.Red, poslednjaFigura.Kolona] = null;
+
+                        tabla[poslednjaFigura.Red, poslednjaFigura.Kolona].Content = null;
+
+                        Image figuraSlika = new Image
+                        {
+                            Source = new BitmapImage(new Uri(poslednjaFigura.GetSlika(), UriKind.Relative)),
+                            Width = 50,
+                            Height = 50,
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center
+                        };
+                        tabla[red, kolona].Content = figuraSlika;
+
+                        ResetujBoje();
+                        poslednjaFigura = null;
+                    }
+                }
+            }
+        }
+        private void ResetujBoje()
+        {
+            foreach(var (r,k) in poslednjaObojenaPolja)
+            {
+                if ((r + k) % 2 != 0)
+                    tabla[r,k].Background= new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFC8EDF"));
+                else
+                    tabla[r,k].Background= new SolidColorBrush((Color)ColorConverter.ConvertFromString("white"));
+            }
+            poslednjaObojenaPolja.Clear();
         }
     }
 }

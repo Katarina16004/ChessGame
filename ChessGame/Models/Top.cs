@@ -55,5 +55,39 @@ namespace ChessGame.Models
 
             return false;  
         }
+        public override List<(int, int)> MoguciPotezi(Figura[,] tabla)
+        {
+            List<(int, int)> potezi = new List<(int, int)>();
+
+            int[] pomaciRed = { -1, 1, 0, 0 };
+            int[] pomaciKolona = { 0, 0, -1, 1 };
+
+            for (int i = 0; i < 4; i++)
+            {
+                int pomakRed = pomaciRed[i];
+                int pomakKolona = pomaciKolona[i];
+
+                int noviRed = Red;
+                int novaKolona = Kolona;
+
+                while (true)
+                {
+                    noviRed = noviRed + pomakRed;
+                    novaKolona = novaKolona + pomakKolona;
+
+                    if (noviRed < 0 || noviRed >= 8 || novaKolona < 0 || novaKolona >= 8)
+                        break;
+
+                    if (ValidanPotez(noviRed, novaKolona, tabla))
+                    {
+                        potezi.Add((noviRed, novaKolona));
+                    }
+
+                    if (tabla[noviRed, novaKolona] != null)
+                        break;
+                }
+            }
+            return potezi;
+        }
     }
 }

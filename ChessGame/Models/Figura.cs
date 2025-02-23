@@ -18,6 +18,21 @@ namespace ChessGame.Models
             Red = red;
             Kolona = kolona;
         }
+        public string GetSlika()
+        {
+            string bojaSlike;
+            if (Boja == "bela")
+            {
+                bojaSlike = "beli";
+            }
+            else
+            {
+                bojaSlike = "crni";
+            }
+            string imeFigure = this.GetType().Name.ToLower();
+            return $"Resources/Figure/{bojaSlike}_{imeFigure}.png";
+        }
         public abstract bool ValidanPotez(int novaPozicijaRed, int novaPozicijaKolona, Figura[,] tabla);
+        public abstract List<(int, int)> MoguciPotezi(Figura[,] tabla);
     }
 }

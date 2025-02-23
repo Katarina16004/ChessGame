@@ -61,5 +61,10 @@ namespace ChessGame.Models
 
             return false;
         }
+
+        public override List<(int, int)> MoguciPotezi(Figura[,] figura)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

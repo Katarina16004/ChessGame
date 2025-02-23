@@ -23,5 +23,26 @@ namespace ChessGame.Models
 
             return false;
         }
+        public override List<(int, int)> MoguciPotezi(Figura[,] tabla) //vraca nam polja koja cemo u mainu da obojimo
+        {
+            List<(int, int)> potezi = new List<(int, int)>();
+            int[] pomaciRed = { -2, -2, -1, -1, 1, 1, 2, 2 };
+            int[] pomaciKolona = { -1, 1, -2, 2, -2, 2, -1, 1 };
+
+            for (int i = 0; i < 8; i++)
+            {
+                int noviRed = Red + pomaciRed[i];
+                int novaKolona = Kolona + pomaciKolona[i];
+
+                if (noviRed >= 0 && noviRed < 8 && novaKolona >= 0 && novaKolona < 8)
+                {
+                    if (ValidanPotez(noviRed, novaKolona, tabla))
+                    {
+                        potezi.Add((noviRed, novaKolona));
+                    }
+                }
+            }
+            return potezi;
+        }
     }
 }
