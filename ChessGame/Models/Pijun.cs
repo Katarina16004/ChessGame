@@ -40,7 +40,7 @@ namespace ChessGame.Models
                     }
                 }
             }
-            else if (Math.Abs(pomakKolona) == 1 && (Boja == "bela" && pomakRed == 1 || Boja == "crna" && pomakRed == -1))
+            else if (Math.Abs(pomakKolona) == 1 && (Boja == "bela" && pomakRed == -1 || Boja == "crna" && pomakRed == 1))
             {
                 if (tabla[novaPozicijaRed, novaPozicijaKolona] != null && tabla[novaPozicijaRed, novaPozicijaKolona].Boja != Boja)
                 {
