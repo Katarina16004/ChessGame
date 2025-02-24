@@ -44,9 +44,36 @@ namespace ChessGame.Models
 
             return false;
         }
-        public override List<(int, int)> MoguciPotezi(Figura[,] figura)
+        public override List<(int, int)> MoguciPotezi(Figura[,] tabla)
         {
-            throw new NotImplementedException();
+            List<(int, int)> potezi = new List<(int, int)>();
+            int[] smerovi = { -1, 1 };
+
+            foreach (int r in smerovi)
+            {
+                foreach (int k in smerovi)
+                {
+                    int i = Red + r;
+                    int j = Kolona + k;
+                    while (i >= 0 && i < 8 && j >= 0 && j < 8)
+                    {
+                        if (tabla[i, j] == null)
+                        {
+                            potezi.Add((i, j));
+                        }
+                        else
+                        {
+                            if (tabla[i, j].Boja != Boja)
+                                potezi.Add((i, j));
+                            break;
+                        }
+                        i = i + r;
+                        j = j + k;
+                    }
+                }
+            }
+
+            return potezi;
         }
     }
 }

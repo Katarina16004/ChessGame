@@ -17,7 +17,7 @@ namespace ChessGame.Models
 
             if (pomakKolona == 0)
             {
-                if (Boja == "bela")
+                if (Boja == "crna")
                 {
                     if (pomakRed == 1 && tabla[novaPozicijaRed, novaPozicijaKolona] == null)
                     {
@@ -28,7 +28,7 @@ namespace ChessGame.Models
                         return true; // dva koraka napred na pocetku
                     }
                 }
-                else if (Boja == "crna")
+                else if (Boja == "bela")
                 {
                     if (pomakRed == -1 && tabla[novaPozicijaRed, novaPozicijaKolona] == null)
                     {
@@ -50,9 +50,31 @@ namespace ChessGame.Models
 
             return false; 
         }
-        public override List<(int, int)> MoguciPotezi(Figura[,] figura)
+        public override List<(int, int)> MoguciPotezi(Figura[,] tabla)
         {
-            throw new NotImplementedException();
+            List<(int, int)> potezi = new List<(int, int)>();
+            int smer= 1;
+            int startniRed = 1;
+
+            if (Boja == "bela")
+            {
+                smer = -1; 
+                startniRed = 6;
+            }
+
+            if (Red + smer >= 0 && Red + smer < 8 && tabla[Red + smer, Kolona] == null)
+                potezi.Add((Red + smer, Kolona));
+
+            if (Red == startniRed && tabla[Red + smer, Kolona] == null && tabla[Red + 2 * smer, Kolona] == null)
+                potezi.Add((Red + 2 * smer, Kolona));
+
+            if (Kolona - 1 >= 0 && Red + smer >= 0 && Red + smer < 8 && tabla[Red + smer, Kolona - 1] != null && tabla[Red + smer, Kolona - 1].Boja != Boja)
+                potezi.Add((Red + smer, Kolona - 1));
+
+            if (Kolona + 1 < 8 && Red + smer >= 0 && Red + smer < 8 && tabla[Red + smer, Kolona + 1] != null && tabla[Red + smer, Kolona + 1].Boja != Boja)
+                potezi.Add((Red + smer, Kolona + 1));
+
+            return potezi;
         }
     }
 }

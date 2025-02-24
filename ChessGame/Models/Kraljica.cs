@@ -62,9 +62,17 @@ namespace ChessGame.Models
             return false;
         }
 
-        public override List<(int, int)> MoguciPotezi(Figura[,] figura)
+        public override List<(int, int)> MoguciPotezi(Figura[,] tabla)  // miks lovca i topa
         {
-            throw new NotImplementedException();
+            List<(int, int)> potezi = new List<(int, int)>();
+
+            Top top = new Top(Boja, Red, Kolona);
+            potezi.AddRange(top.MoguciPotezi(tabla));
+
+            Lovac lovac = new Lovac(Boja, Red, Kolona);
+            potezi.AddRange(lovac.MoguciPotezi(tabla));
+
+            return potezi;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace ChessGame
         private Figura[,] tablaFigura = new Figura[8, 8];
         private List<(int, int)> poslednjaObojenaPolja = new List<(int, int)>();
         private Figura poslednjaFigura = null; // poslednja izabrana
+        private List<(int,int)> poljaZaJelo=new List<(int, int)>();
         public MainWindow()
         {
             InitializeComponent();
@@ -108,6 +109,20 @@ namespace ChessGame
             Figura polje = tablaFigura[red, kolona];
             if (polje != null) // ako je kliknuto na figuru
             {
+                if(poljaZaJelo.Contains((red,kolona))) //jedemo figuru
+                {
+                    if (poslednjaFigura.ValidanPotez(red, kolona, tablaFigura))
+                    {
+                        tablaFigura[red, kolona] = null; //pojedemo figuru
+                        PremestiFiguru(red, kolona);
+                        
+                        poljaZaJelo.Clear();
+
+                        ResetujBoje();
+                        poslednjaFigura = null;
+                        return;
+                    }
+                }
                 // prikazivanje moguceg kretanja
                 ResetujBoje();
                 poslednjaFigura = polje;
@@ -129,6 +144,7 @@ namespace ChessGame
                     else
                     {
                         tabla[r, k].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("red"));
+                        poljaZaJelo.Add((r, k));
                     }
                     poslednjaObojenaPolja.Add((r, k));
                 }
@@ -140,20 +156,8 @@ namespace ChessGame
                     //proveravamo da li je polje validno
                     if(poslednjaFigura.ValidanPotez(red,kolona,tablaFigura))
                     {
-                        tablaFigura[red, kolona] = poslednjaFigura;
-                        tablaFigura[poslednjaFigura.Red, poslednjaFigura.Kolona] = null;
 
-                        tabla[poslednjaFigura.Red, poslednjaFigura.Kolona].Content = null;
-
-                        Image figuraSlika = new Image
-                        {
-                            Source = new BitmapImage(new Uri(poslednjaFigura.GetSlika(), UriKind.Relative)),
-                            Width = 50,
-                            Height = 50,
-                            HorizontalAlignment = HorizontalAlignment.Center,
-                            VerticalAlignment = VerticalAlignment.Center
-                        };
-                        tabla[red, kolona].Content = figuraSlika;
+                        PremestiFiguru(red, kolona);
 
                         ResetujBoje();
                         poslednjaFigura = null;
@@ -171,6 +175,24 @@ namespace ChessGame
                     tabla[r,k].Background= new SolidColorBrush((Color)ColorConverter.ConvertFromString("white"));
             }
             poslednjaObojenaPolja.Clear();
+        }
+        private void PremestiFiguru(int red, int kolona)
+        {
+            tablaFigura[poslednjaFigura.Red, poslednjaFigura.Kolona] = null;
+
+            tabla[poslednjaFigura.Red, poslednjaFigura.Kolona].Content = null;
+
+            Image figuraSlika = new Image
+            {
+                Source = new BitmapImage(new Uri(poslednjaFigura.GetSlika(), UriKind.Relative)),
+                Width = 50,
+                Height = 50,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            tabla[red, kolona].Content = figuraSlika;
+            tablaFigura[red, kolona] = poslednjaFigura;
         }
     }
 }
