@@ -23,6 +23,7 @@ namespace ChessGame
         private Figura poslednjaFigura = null; // poslednja izabrana
         private List<(int,int)> poljaZaJelo=new List<(int, int)>();
         private List<Figura> pojedeneFigure=new List<Figura>(); //lista figura za vracanje na tablu
+        private List<(int, int)> pozicijeKralja = new List<(int, int)> { (7, 4), (0, 4) }; //na prvom mestu beli, na drugom crni 
         public MainWindow()
         {
             InitializeComponent();
@@ -203,6 +204,45 @@ namespace ChessGame
 
             tabla[red, kolona].Content = figuraSlika;
             tablaFigura[red, kolona] = poslednjaFigura;
+            poljaZaJelo.Clear();
+            poslednjaFigura.Red = red;
+            poslednjaFigura.Kolona = kolona;
+
+            if(poslednjaFigura.GetType().Name=="Kralj")
+            {
+                if (poslednjaFigura.Boja == "bela")
+                    pozicijeKralja[0] = (red, kolona);
+                else
+                    pozicijeKralja[1] = (red, kolona);
+            }
+            //MessageBox.Show($"Beli: {pozicijeKralja[0].Item1},{pozicijeKralja[0].Item2}\nCrni: {pozicijeKralja[1].Item1},{pozicijeKralja[1].Item2}");
+            Kralj beliKralj = tablaFigura[pozicijeKralja[0].Item1, pozicijeKralja[0].Item2] as Kralj;
+            Kralj crniKralj = tablaFigura[pozicijeKralja[1].Item1, pozicijeKralja[1].Item2] as Kralj;
+            
+            if (crniKralj.DaLiJeMat(tablaFigura))
+            {
+                MessageBox.Show("Crni kralj je u matu");
+            }
+            else if (beliKralj.DaLiJeMat(tablaFigura))
+            {
+                MessageBox.Show("Beli kralj je u matu");
+            }
+            else if (crniKralj.DaLiJePat(tablaFigura))
+            {
+                MessageBox.Show("Crni kralj je u patu");
+            }
+            else if (beliKralj.DaLiJePat(tablaFigura))
+            {
+                MessageBox.Show("Beli kralj je u patu");
+            }
+            else
+            {
+                if (crniKralj.DaLiJeKraljUgrozen(tablaFigura))
+                    MessageBox.Show("Crni kralj je ugrozen");
+                else if(beliKralj.DaLiJeKraljUgrozen(tablaFigura))
+                    MessageBox.Show("Beli kralj je ugrozen");
+            }
+
         }
         private void IzbaciSvojuFiguru(int red, int kolona)
         {
