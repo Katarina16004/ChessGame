@@ -140,9 +140,6 @@ namespace ChessGame
                 poslednjaObojenaPolja.Clear();
                 poslednjaFigura.Red = red;
                 poslednjaFigura.Kolona = kolona;
-                
-                //MessageBox.Show($"{red}{kolona} dugme");
-                //MessageBox.Show($"{poslednjaFigura.GetSlika()} se nalazi na {poslednjaFigura.Red} redu i {poslednjaFigura.Kolona} koloni");
                
                 List<(int, int)> moguciPotezi = poslednjaFigura.MoguciPotezi(tablaFigura);
 
@@ -208,7 +205,7 @@ namespace ChessGame
             poslednjaFigura.Red = red;
             poslednjaFigura.Kolona = kolona;
 
-            if(poslednjaFigura.GetType().Name=="Kralj")
+            if (poslednjaFigura.GetType().Name == "Kralj")
             {
                 if (poslednjaFigura.Boja == "bela")
                     pozicijeKralja[0] = (red, kolona);
@@ -218,7 +215,7 @@ namespace ChessGame
             //MessageBox.Show($"Beli: {pozicijeKralja[0].Item1},{pozicijeKralja[0].Item2}\nCrni: {pozicijeKralja[1].Item1},{pozicijeKralja[1].Item2}");
             Kralj beliKralj = tablaFigura[pozicijeKralja[0].Item1, pozicijeKralja[0].Item2] as Kralj;
             Kralj crniKralj = tablaFigura[pozicijeKralja[1].Item1, pozicijeKralja[1].Item2] as Kralj;
-            
+
             if (crniKralj.DaLiJeMat(tablaFigura))
             {
                 MessageBox.Show("Crni kralj je u matu");
@@ -234,6 +231,14 @@ namespace ChessGame
             else if (beliKralj.DaLiJePat(tablaFigura))
             {
                 MessageBox.Show("Beli kralj je u patu");
+            }
+            else if (tablaFigura.Cast<Figura>().Count(figura => figura != null) == 3) //pravilo nedovoljno materijala za pobedu
+            {
+                foreach(var fig in tablaFigura)
+                {
+                    if (fig != null && fig.GetType().Name != "Kralj" && (fig.GetType().Name == "Konj" || fig.GetType().Name != "Lovac"))
+                        MessageBox.Show("Nereseno. Nedovoljno materijala za pobedu");
+                }
             }
             else
             {
@@ -261,7 +266,6 @@ namespace ChessGame
                 VratiFiguruWindow vratiFiguruWindow = new VratiFiguruWindow(naseFigue);
                 vratiFiguruWindow.ShowDialog();
                 poslednjaFigura=vratiFiguruWindow.odabranaFigura;
-                //MessageBox.Show($"{pojedeneFigure.Count()}");
                 
                 PremestiFiguru(red, kolona);
             }
