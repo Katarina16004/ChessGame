@@ -22,6 +22,7 @@ namespace ChessGame
         private List<(int, int)> poslednjaObojenaPolja = new List<(int, int)>();
         private Figura poslednjaFigura = null; // poslednja izabrana
         private List<(int,int)> poljaZaJelo=new List<(int, int)>();
+        private List<Figura> pojedeneFigure=new List<Figura>(); 
         public MainWindow()
         {
             InitializeComponent();
@@ -113,12 +114,15 @@ namespace ChessGame
                 {
                     if (poslednjaFigura.ValidanPotez(red, kolona, tablaFigura))
                     {
+                        if (tablaFigura[red, kolona].GetType().Name!="Pijun")
+                            pojedeneFigure.Add(tablaFigura[red, kolona]); //necemo da cuvamo pijuna
                         tablaFigura[red, kolona] = null; //pojedemo figuru
                         PremestiFiguru(red, kolona);
                         
                         poljaZaJelo.Clear();
 
                         ResetujBoje();
+                        IzbaciSvojuFiguru(red, kolona);
                         poslednjaFigura = null;
                         return;
                     }
@@ -158,8 +162,8 @@ namespace ChessGame
                     {
 
                         PremestiFiguru(red, kolona);
-
                         ResetujBoje();
+                        IzbaciSvojuFiguru(red, kolona);
                         poslednjaFigura = null;
                     }
                 }
@@ -193,6 +197,29 @@ namespace ChessGame
 
             tabla[red, kolona].Content = figuraSlika;
             tablaFigura[red, kolona] = poslednjaFigura;
+        }
+        private void IzbaciSvojuFiguru(int red, int kolona)
+        {
+            Image img = (Image)tabla[red, kolona].Content;
+            BitmapImage imgSource = (BitmapImage)img.Source;
+            string imgPath = imgSource.UriSource.ToString();
+            if ((imgPath.Contains("crni_pijun.png") && red == 7) || (imgPath.Contains("beli_pijun.png") && red == 0))
+            {
+                List<Figura> naseFigue= new List<Figura>();
+                foreach (Figura f in pojedeneFigure)
+                {
+                    if (f.Boja == poslednjaFigura.Boja)
+                        naseFigue.Add(f);
+                }
+                poljaZaJelo.Clear(); //PROVERITI KASNIJE
+                VratiFiguruWindow vratiFiguruWindow = new VratiFiguruWindow(naseFigue);
+                vratiFiguruWindow.ShowDialog();
+                poslednjaFigura=vratiFiguruWindow.odabranaFigura;
+                pojedeneFigure.Remove(poslednjaFigura);
+                //MessageBox.Show($"{pojedeneFigure.Count()}");
+                
+                PremestiFiguru(red, kolona);
+            }
         }
     }
 }
