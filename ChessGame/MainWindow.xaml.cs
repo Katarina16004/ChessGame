@@ -22,7 +22,7 @@ namespace ChessGame
         private List<(int, int)> poslednjaObojenaPolja = new List<(int, int)>();
         private Figura poslednjaFigura = null; // poslednja izabrana
         private List<(int,int)> poljaZaJelo=new List<(int, int)>();
-        private List<Figura> pojedeneFigure=new List<Figura>(); 
+        private List<Figura> pojedeneFigure=new List<Figura>(); //lista figura za vracanje na tablu
         public MainWindow()
         {
             InitializeComponent();
@@ -75,8 +75,10 @@ namespace ChessGame
         private bool PostaviPocetneFigure()
         {
             tablaFigura[0, 0] = new Top("crna", 0, 0);
+            pojedeneFigure.Add(tablaFigura[0, 0]);
             tablaFigura[0, 7] = new Top("crna", 0, 7);
             tablaFigura[7, 0] = new Top("bela", 7, 0);
+            pojedeneFigure.Add(tablaFigura[7,0]);
             tablaFigura[7, 7] = new Top("bela", 7, 7);
             for (int i = 0; i < 8; i++)
             {
@@ -87,14 +89,20 @@ namespace ChessGame
                 tablaFigura[6, i] = new Pijun("bela", 6, i);
             }
             tablaFigura[0, 1] = new Konj("crna", 0, 1);
+            pojedeneFigure.Add(tablaFigura[0, 1]);
             tablaFigura[0, 2] = new Lovac("crna", 0, 2);
+            pojedeneFigure.Add(tablaFigura[0, 2]);
             tablaFigura[0, 3] = new Kraljica("crna", 0, 3);
+            pojedeneFigure.Add(tablaFigura[0, 3]);
             tablaFigura[0, 4] = new Kralj("crna", 0, 4);
             tablaFigura[0, 5] = new Lovac("crna", 0, 5);
             tablaFigura[0, 6] = new Konj("crna", 0, 6);
             tablaFigura[7, 1] = new Konj("bela", 7, 1);
+            pojedeneFigure.Add(tablaFigura[7,1]);
             tablaFigura[7, 2] = new Lovac("bela", 7, 2);
+            pojedeneFigure.Add(tablaFigura[7, 2]);
             tablaFigura[7, 3] = new Kraljica("bela", 7, 3);
+            pojedeneFigure.Add(tablaFigura[7, 3]);
             tablaFigura[7, 4] = new Kralj("bela", 7, 4);
             tablaFigura[7, 5] = new Lovac("bela", 7, 5);
             tablaFigura[7, 6] = new Konj("bela", 7, 6);
@@ -114,8 +122,6 @@ namespace ChessGame
                 {
                     if (poslednjaFigura.ValidanPotez(red, kolona, tablaFigura))
                     {
-                        if (tablaFigura[red, kolona].GetType().Name!="Pijun")
-                            pojedeneFigure.Add(tablaFigura[red, kolona]); //necemo da cuvamo pijuna
                         tablaFigura[red, kolona] = null; //pojedemo figuru
                         PremestiFiguru(red, kolona);
                         
@@ -215,7 +221,6 @@ namespace ChessGame
                 VratiFiguruWindow vratiFiguruWindow = new VratiFiguruWindow(naseFigue);
                 vratiFiguruWindow.ShowDialog();
                 poslednjaFigura=vratiFiguruWindow.odabranaFigura;
-                pojedeneFigure.Remove(poslednjaFigura);
                 //MessageBox.Show($"{pojedeneFigure.Count()}");
                 
                 PremestiFiguru(red, kolona);
