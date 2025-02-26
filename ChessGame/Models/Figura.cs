@@ -11,12 +11,16 @@ namespace ChessGame.Models
         public string Boja { get; set; } 
         public int Red { get; set; }   
         public int Kolona { get; set; }  
+        public int PrethodniRed { get; set; }
+        public int PrethodnaKolona { get; set; }
 
         public Figura(string boja, int red, int kolona)
         {
             Boja = boja;
             Red = red;
             Kolona = kolona;
+            PrethodnaKolona = -1;
+            PrethodniRed = -1;
         }
         public string GetSlika()
         {

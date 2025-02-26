@@ -46,6 +46,14 @@ namespace ChessGame.Models
                 {
                     return true; // uzimanje protivnicke figure
                 }
+                if(tabla[novaPozicijaRed, novaPozicijaKolona] == null)  //an pasan
+                {
+                    if((Boja == "bela" && tabla[novaPozicijaRed+1,novaPozicijaKolona]!= null && tabla[novaPozicijaRed + 1, novaPozicijaKolona].Boja!=Boja)
+                        || (Boja == "crna" && tabla[novaPozicijaRed - 1, novaPozicijaKolona] != null && tabla[novaPozicijaRed - 1, novaPozicijaKolona].Boja != Boja))
+                    {
+                        return true;
+                    }
+                }
             }
 
             return false; 
@@ -73,7 +81,34 @@ namespace ChessGame.Models
 
             if (Kolona + 1 < 8 && Red + smer >= 0 && Red + smer < 8 && tabla[Red + smer, Kolona + 1] != null && tabla[Red + smer, Kolona + 1].Boja != Boja)
                 potezi.Add((Red + smer, Kolona + 1));
+            //an pasan
+            if (Boja == "bela" && Red==3)
+            {
+                if (Kolona - 1 >= 0 && tabla[Red, Kolona - 1] is Pijun protivnickiPijun && protivnickiPijun.Boja != Boja && protivnickiPijun.PrethodniRed==1 &&
+                    protivnickiPijun.PrethodniRed == MainWindow.GetPoslednjiPotez()[0].Item1 && protivnickiPijun.PrethodnaKolona == MainWindow.GetPoslednjiPotez()[0].Item2)
+                {
+                    potezi.Add((Red - 1, Kolona - 1));
+                }
+                if (Kolona + 1 < 8 && tabla[Red, Kolona + 1] is Pijun protivnickiPijunn && protivnickiPijunn.Boja != Boja && protivnickiPijunn.PrethodniRed == 1
+                    && protivnickiPijunn.PrethodniRed == MainWindow.GetPoslednjiPotez()[0].Item1 && protivnickiPijunn.PrethodnaKolona == MainWindow.GetPoslednjiPotez()[0].Item2)
+                {
+                    potezi.Add((Red - 1, Kolona + 1));
+                }
 
+            }
+            else if (Boja == "crna" && Red==4)
+            {
+                if (Kolona - 1 >= 0 && tabla[Red, Kolona - 1] is Pijun protivnickiPijun && protivnickiPijun.Boja != Boja && protivnickiPijun.PrethodniRed == 6 &&
+                    protivnickiPijun.PrethodniRed == MainWindow.GetPoslednjiPotez()[0].Item1 && protivnickiPijun.PrethodnaKolona == MainWindow.GetPoslednjiPotez()[0].Item2)
+                {
+                    potezi.Add((Red + 1, Kolona - 1));
+                }
+                else if (Kolona + 1 < 8 && tabla[Red, Kolona + 1] is Pijun protivnickiPijunn && protivnickiPijunn.Boja != Boja && protivnickiPijunn.PrethodniRed == 6 &&
+                    protivnickiPijunn.PrethodniRed == MainWindow.GetPoslednjiPotez()[0].Item1 && protivnickiPijunn.PrethodnaKolona == MainWindow.GetPoslednjiPotez()[0].Item2)
+                {
+                    potezi.Add((Red + 1, Kolona + 1));
+                }
+            }
             return potezi;
         }
     }

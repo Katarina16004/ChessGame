@@ -25,6 +25,7 @@ namespace ChessGame
         private List<Figura> pojedeneFigure=new List<Figura>(); //lista figura za vracanje na tablu
         private List<(int, int)> pozicijeKralja = new List<(int, int)> { (7, 4), (0, 4) }; //na prvom mestu beli, na drugom crni 
         private bool beliIgracNaRedu = true;
+        private static List<(int,int)> poslednjaPomerenaFigura= new List<(int, int)> { (-1, -1) }; //prethodna pozicija poslednje pomerene figure
         public MainWindow()
         {
             InitializeComponent();
@@ -156,18 +157,18 @@ namespace ChessGame
                 poslednjaObojenaPolja.Clear();
                 poslednjaFigura.Red = red;
                 poslednjaFigura.Kolona = kolona;
-               
+
                 List<(int, int)> moguciPotezi = poslednjaFigura.MoguciPotezi(tablaFigura);
 
                 foreach (var (r, k) in moguciPotezi)
                 {
                     if (tablaFigura[r, k] == null)
                     {
-                        tabla[r, k].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("lightBlue"));
+                        tabla[r, k].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#C3FDB8"));
                     }
                     else
                     {
-                        tabla[r, k].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("red"));
+                        tabla[r, k].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E55451"));
                         poljaZaJelo.Add((r, k));
                     }
                     poslednjaObojenaPolja.Add((r, k));
@@ -187,6 +188,20 @@ namespace ChessGame
 
                         if(poslednjaFigura.GetType().Name=="Pijun")
                         {
+                            if (poslednjaFigura.Boja=="bela")
+                            {
+                                if (tablaFigura[red + 1, kolona] != null && tablaFigura[red+1,kolona].GetType().Name=="Pijun" 
+                                        && tablaFigura[red + 1, kolona].Boja!=poslednjaFigura.Boja)
+                                    IzvrsiAnPasan(red + 1, kolona);
+                                
+                                    
+                            }
+                            else
+                            {
+                                if (tablaFigura[red - 1, kolona] != null && tablaFigura[red - 1, kolona].GetType().Name == "Pijun"
+                                        && tablaFigura[red - 1, kolona].Boja != poslednjaFigura.Boja)
+                                    IzvrsiAnPasan(red - 1, kolona);
+                            }
                             IzbaciSvojuFiguru(red, kolona);
                         }
                         poslednjaFigura = null;
@@ -224,6 +239,10 @@ namespace ChessGame
             tabla[red, kolona].Content = figuraSlika;
             tablaFigura[red, kolona] = poslednjaFigura;
             poljaZaJelo.Clear();
+            poslednjaFigura.PrethodnaKolona = poslednjaFigura.Kolona;
+            poslednjaFigura.PrethodniRed = poslednjaFigura.Red;
+            poslednjaPomerenaFigura[0]=(poslednjaFigura.PrethodniRed,poslednjaFigura.PrethodnaKolona);
+            
             poslednjaFigura.Red = red;
             poslednjaFigura.Kolona = kolona;
 
@@ -295,6 +314,11 @@ namespace ChessGame
                 tablaFigura[red, 3].Kolona = 3;
             }
         }
+        public void IzvrsiAnPasan(int red,int kolona)
+        {
+            tablaFigura[red, kolona] = null;
+            tabla[red,kolona].Content = null;
+        }
         public void ProveriStanjeIgre()
         {
             Kralj beliKralj = tablaFigura[pozicijeKralja[0].Item1, pozicijeKralja[0].Item2] as Kralj;
@@ -352,6 +376,10 @@ namespace ChessGame
                 
                 PremestiFiguru(red, kolona);
             }
+        }
+        public static List<(int, int)> GetPoslednjiPotez()
+        {
+            return poslednjaPomerenaFigura;
         }
     }
 }
