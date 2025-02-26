@@ -11,6 +11,7 @@ namespace ChessGame.Models
     public class Kralj : Figura
     {
         public Kralj(string boja, int red, int kolona) : base(boja, red, kolona) { }
+        private bool prviPomeraj=true;
 
         public override bool ValidanPotez(int novaPozicijaRed, int novaPozicijaKolona, Figura[,] tabla)
         {
@@ -21,11 +22,36 @@ namespace ChessGame.Models
             {
                 if (tabla[novaPozicijaRed, novaPozicijaKolona] == null || tabla[novaPozicijaRed, novaPozicijaKolona].Boja != Boja)
                 {
+                    if(prviPomeraj)
+                        prviPomeraj= false;
                     return true;
                 }
             }
-
+            else if(pomakKolona==2 && pomakRed==0 && prviPomeraj) //mogucnost rokade
+            {
+                if (Boja == "bela" && Red == 7 && Kolona == 4)
+                {
+                    return DaLiMozeRokada(tabla, 7);
+                }
+                else if (Boja == "crna" && Red == 0 && Kolona == 4)
+                {
+                    return DaLiMozeRokada(tabla, 0);
+                }
+            }
             return false;
+        }
+        private bool DaLiMozeRokada(Figura[,] tabla, int red)
+        {
+            if (DaLiJeKraljUgrozen(tabla))
+                return false;
+
+            bool malaRokada = tabla[red, 7] is Top && tabla[red, 7].Boja == Boja && 
+                tabla[red, 5] == null && tabla[red, 6] == null;
+
+            bool velikaRokada = tabla[red, 0] is Top && tabla[red, 0].Boja == Boja &&
+                tabla[red, 1] == null && tabla[red, 2] == null && tabla[red, 3] == null;
+
+            return (malaRokada && Kolona == 4 && tabla[red, 7] != null) || (velikaRokada && Kolona == 4 && tabla[red, 0] != null);
         }
         public override List<(int, int)> MoguciPotezi(Figura[,] tabla)
         {
@@ -45,6 +71,18 @@ namespace ChessGame.Models
                     {
                         potezi.Add((noviRed, novaKolona));
                     }
+                }
+            }
+            //mogucnost rokade
+            if (DaLiMozeRokada(tabla, Red) && prviPomeraj)
+            {
+                if (tabla[Red, 7] is Top && tabla[Red, 5] == null && tabla[Red, 6] == null) // mala
+                {
+                    potezi.Add((Red, 6));
+                }
+                if (tabla[Red, 0] is Top && tabla[Red, 1] == null && tabla[Red, 2] == null && tabla[Red, 3] == null) //velika
+                {
+                    potezi.Add((Red, 2));
                 }
             }
 

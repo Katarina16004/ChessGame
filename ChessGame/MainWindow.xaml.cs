@@ -24,6 +24,7 @@ namespace ChessGame
         private List<(int,int)> poljaZaJelo=new List<(int, int)>();
         private List<Figura> pojedeneFigure=new List<Figura>(); //lista figura za vracanje na tablu
         private List<(int, int)> pozicijeKralja = new List<(int, int)> { (7, 4), (0, 4) }; //na prvom mestu beli, na drugom crni 
+        private bool beliIgracNaRedu = true;
         public MainWindow()
         {
             InitializeComponent();
@@ -119,21 +120,36 @@ namespace ChessGame
             Figura polje = tablaFigura[red, kolona];
             if (polje != null) // ako je kliknuto na figuru
             {
+
                 if(poljaZaJelo.Contains((red,kolona))) //jedemo figuru
                 {
                     if (poslednjaFigura.ValidanPotez(red, kolona, tablaFigura))
                     {
                         tablaFigura[red, kolona] = null; //pojedemo figuru
                         PremestiFiguru(red, kolona);
-                        
+                        ProveriStanjeIgre();
+
                         poljaZaJelo.Clear();
 
-                        ResetujBoje();
-                        IzbaciSvojuFiguru(red, kolona);
+                        ResetujBoje(); 
+                        if (poslednjaFigura.GetType().Name == "Pijun")
+                        {
+                            IzbaciSvojuFiguru(red, kolona);
+                        }
                         poslednjaFigura = null;
+                        beliIgracNaRedu = !beliIgracNaRedu;
                         return;
                     }
+                }/* 
+                if ((beliIgracNaRedu && polje.Boja == "bela") || (!beliIgracNaRedu && polje.Boja == "crna"))
+                {
+                    poslednjaFigura = polje;
                 }
+                else
+                {
+                    MessageBox.Show("Nije tvoje vreme za potez!");
+                    return;
+                }*/
                 // prikazivanje moguceg kretanja
                 ResetujBoje();
                 poslednjaFigura = polje;
@@ -166,9 +182,15 @@ namespace ChessGame
                     {
 
                         PremestiFiguru(red, kolona);
+                        ProveriStanjeIgre();
                         ResetujBoje();
-                        IzbaciSvojuFiguru(red, kolona);
+
+                        if(poslednjaFigura.GetType().Name=="Pijun")
+                        {
+                            IzbaciSvojuFiguru(red, kolona);
+                        }
                         poslednjaFigura = null;
+                        beliIgracNaRedu = !beliIgracNaRedu;
                     }
                 }
             }
@@ -208,11 +230,73 @@ namespace ChessGame
             if (poslednjaFigura.GetType().Name == "Kralj")
             {
                 if (poslednjaFigura.Boja == "bela")
+                {
+                    int pomeraj = kolona - pozicijeKralja[0].Item2;
+                    if (Math.Abs(pomeraj) == 2)
+                    {
+                        IzvrsiRokadu(red, pomeraj,poslednjaFigura.Boja);
+                    }
                     pozicijeKralja[0] = (red, kolona);
+                }
                 else
+                {
+                    int pomeraj = kolona - pozicijeKralja[1].Item2;
+                    if (Math.Abs(pomeraj) == 2)
+                    {
+                        IzvrsiRokadu(red, pomeraj, poslednjaFigura.Boja);
+                    }
                     pozicijeKralja[1] = (red, kolona);
+                }
             }
-            //MessageBox.Show($"Beli: {pozicijeKralja[0].Item1},{pozicijeKralja[0].Item2}\nCrni: {pozicijeKralja[1].Item1},{pozicijeKralja[1].Item2}");
+        }
+        public void IzvrsiRokadu(int red, int pomeraj, string boja)
+        {
+            Image topSlika;
+            if(boja=="bela")
+            {
+                topSlika = new Image
+                {
+                    Source = new BitmapImage(new Uri("Resources/Figure/beli_top.png", UriKind.Relative)),
+                    Width = 50,
+                    Height = 50,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+            }
+            else
+            {
+                topSlika = new Image
+                {
+                    Source = new BitmapImage(new Uri("Resources/Figure/crni_top.png", UriKind.Relative)),
+                    Width = 50,
+                    Height = 50,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+            }
+
+            if (pomeraj == 2) //mala rokada
+            {
+                tablaFigura[red, 5] = tablaFigura[red, 7];
+                tablaFigura[red, 7] = null;
+                tabla[red, 7].Content = null;
+                tabla[red, 5].Content = topSlika;
+                tablaFigura[red, 5].Red = red;
+                tablaFigura[red, 5].Kolona = 5;
+            }
+            else if (pomeraj == -2) //velika rokada
+            {
+                //pomeramo topa na [7,3]
+                tablaFigura[red, 3] = tablaFigura[red, 0];
+                tablaFigura[red, 0] = null;
+                tabla[red, 0].Content = null;
+                tabla[red, 3].Content = topSlika;
+                tablaFigura[red, 3].Red = red;
+                tablaFigura[red, 3].Kolona = 3;
+            }
+        }
+        public void ProveriStanjeIgre()
+        {
             Kralj beliKralj = tablaFigura[pozicijeKralja[0].Item1, pozicijeKralja[0].Item2] as Kralj;
             Kralj crniKralj = tablaFigura[pozicijeKralja[1].Item1, pozicijeKralja[1].Item2] as Kralj;
 
@@ -234,7 +318,7 @@ namespace ChessGame
             }
             else if (tablaFigura.Cast<Figura>().Count(figura => figura != null) == 3) //pravilo nedovoljno materijala za pobedu
             {
-                foreach(var fig in tablaFigura)
+                foreach (var fig in tablaFigura)
                 {
                     if (fig != null && fig.GetType().Name != "Kralj" && (fig.GetType().Name == "Konj" || fig.GetType().Name != "Lovac"))
                         MessageBox.Show("Nereseno. Nedovoljno materijala za pobedu");
@@ -244,10 +328,9 @@ namespace ChessGame
             {
                 if (crniKralj.DaLiJeKraljUgrozen(tablaFigura))
                     MessageBox.Show("Crni kralj je ugrozen");
-                else if(beliKralj.DaLiJeKraljUgrozen(tablaFigura))
+                else if (beliKralj.DaLiJeKraljUgrozen(tablaFigura))
                     MessageBox.Show("Beli kralj je ugrozen");
             }
-
         }
         private void IzbaciSvojuFiguru(int red, int kolona)
         {
