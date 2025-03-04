@@ -109,28 +109,28 @@ namespace ChessGame.Models
 
         public bool ImaLiKraljSigurnoPolje(Figura[,] tabla) // da li su okolna polja slobodna
         {
-            List<(int, int)> moguciPotezi = new List<(int, int)>
-            {
-                (Red - 1, Kolona - 1), (Red - 1, Kolona), (Red - 1, Kolona + 1),
-                (Red, Kolona - 1), (Red, Kolona + 1),
-                (Red + 1, Kolona - 1), (Red + 1, Kolona), (Red + 1, Kolona + 1)
-            };
-
-            foreach (var (r, k) in moguciPotezi)
+            foreach (var (r, k) in MoguciPotezi(tabla))
             {
                 if (r >= 0 && r < 8 && k >= 0 && k < 8)
                 {
-                    if (tabla[r, k] == null || (tabla[r, k] != null && tabla[r, k].Boja != this.Boja))
+                    if (tabla[r, k] == null || (tabla[r,k]!=null && tabla[r, k].Boja != this.Boja)) //proveriti da li tu figuru neko stiti
                     {
-                        int originalRed = Red;
-                        int originalKolona = Kolona;
-                        Red = r;
-                        Kolona = k;
+                        // Privremeno premestimo kralja
+                        Figura orgFigura = tabla[r, k];
+                        int orgRed = Red;
+                        int orgKol = Kolona;
+                        tabla[Red, Kolona] = null;
+                        tabla[r, k] = this;
+                        tabla[r, k].Red = r;
+                        tabla[r, k].Kolona = k;
 
                         bool kraljUgrozen = DaLiJeKraljUgrozen(tabla);
 
-                        Red = originalRed;
-                        Kolona = originalKolona;
+                        // Vratimo stanje table
+                        tabla[r, k] = orgFigura;
+                        tabla[orgRed, orgKol] = this;
+                        tabla[orgRed,orgKol].Red=orgRed;
+                        tabla[orgRed, orgKol].Kolona = orgKol;
 
                         if (!kraljUgrozen)
                         {
