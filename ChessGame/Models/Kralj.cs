@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -113,9 +114,9 @@ namespace ChessGame.Models
             {
                 if (r >= 0 && r < 8 && k >= 0 && k < 8)
                 {
-                    if (tabla[r, k] == null || (tabla[r,k]!=null && tabla[r, k].Boja != this.Boja)) //proveriti da li tu figuru neko stiti
+                    if (tabla[r, k] == null || (tabla[r,k]!=null && tabla[r, k].Boja != this.Boja && !DaLiJeZasticenaProtFigura(tabla[r,k],tabla))) //slobodno polje ima ukoliko je prazno ili moze da pojede tu figuru
                     {
-                        // Privremeno premestimo kralja
+                        // privremeno premestimo kralja
                         Figura orgFigura = tabla[r, k];
                         int orgRed = Red;
                         int orgKol = Kolona;
@@ -126,7 +127,7 @@ namespace ChessGame.Models
 
                         bool kraljUgrozen = DaLiJeKraljUgrozen(tabla);
 
-                        // Vratimo stanje table
+                        // vratimo stanje table
                         tabla[r, k] = orgFigura;
                         tabla[orgRed, orgKol] = this;
                         tabla[orgRed,orgKol].Red=orgRed;
@@ -141,13 +142,48 @@ namespace ChessGame.Models
             }
             return false;
         }
+        public bool DaLiJeZasticenaProtFigura(Figura figura, Figura[,] tabla)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Figura saveznik = tabla[i,j];
+                    if(saveznik!=null && saveznik!=figura && saveznik.Boja==figura.Boja)
+                    {
+                        if (saveznik.ValidanPotez(figura.Red, figura.Kolona, tabla))
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         public bool DaLiJeMat(Figura[,] tabla)
         {
             if (!DaLiJeKraljUgrozen(tabla))
                 return false;
+            
             if (ImaLiKraljSigurnoPolje(tabla))
                 return false;
+
+            int brojNapadaca = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Figura figura = tabla[i, j];
+                    if (figura != null && figura.Boja != this.Boja)
+                    {
+                        if (figura.ValidanPotez(Red, Kolona, tabla))
+                        {
+                            brojNapadaca++;
+                        }
+                    }
+                }
+            }
+            if (brojNapadaca >= 2)
+                return true;
 
             for (int i = 0; i < 8; i++)
             {
@@ -163,10 +199,11 @@ namespace ChessGame.Models
                                 for (int g = 0; g < 8; g++)
                                 {
                                     Figura nasaFigura = tabla[k, g];
-                                    if (nasaFigura != null && nasaFigura.Boja == this.Boja)
+                                    if (nasaFigura != null && nasaFigura.Boja == this.Boja && nasaFigura.GetType().Name!="Kralj")
                                     {
-                                        if (nasaFigura.ValidanPotez(figura.Red, figura.Kolona, tabla))
+                                        if (nasaFigura.ValidanPotez(figura.Red, figura.Kolona, tabla) && !DaLiJeZasticenaProtFigura(figura,tabla))
                                         {
+                                            //MessageBox.Show($"{nasaFigura} moze da pojede {figura}");
                                             return false; // ima ko da pojede pretecu figuru, tako da nije mat
                                         }
                                     }
@@ -193,6 +230,7 @@ namespace ChessGame.Models
                 {
                     if (figura.MoguciPotezi(tabla).Any() && figura.GetType().Name!="Kralj")
                     {
+                        //MessageBox.Show($"Mozemo odigrati {Boja} {figura}");
                         return false;
                     }
                 }
