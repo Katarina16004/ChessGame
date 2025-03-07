@@ -100,6 +100,7 @@ namespace ChessGame.Models
                     {
                         if (figura.ValidanPotez(Red, Kolona, tabla))
                         {
+                            MainWindow.SetPretecaFigura(figura);
                             return true;
                         }
                     }
