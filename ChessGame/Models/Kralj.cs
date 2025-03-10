@@ -23,8 +23,12 @@ namespace ChessGame.Models
             {
                 if (tabla[novaPozicijaRed, novaPozicijaKolona] == null || tabla[novaPozicijaRed, novaPozicijaKolona].Boja != Boja)
                 {
-                    if(prviPomeraj)
-                        prviPomeraj= false;
+                    if (!DaLiJeKraljSiguran(novaPozicijaRed, novaPozicijaKolona, tabla))
+                    {
+                        return false; 
+                    }
+                    if (prviPomeraj)
+                        prviPomeraj = false;
                     return true;
                 }
             }
@@ -70,6 +74,10 @@ namespace ChessGame.Models
                 {
                     if (tabla[noviRed, novaKolona] == null || tabla[noviRed, novaKolona].Boja != Boja)
                     {
+                        if (!DaLiJeKraljSiguran(noviRed, novaKolona, tabla))
+                        {
+                            continue; 
+                        }
                         potezi.Add((noviRed, novaKolona));
                     }
                 }
@@ -89,25 +97,87 @@ namespace ChessGame.Models
 
             return potezi;
         }
+        private bool DaLiJeKraljSiguran(int novaPozicijaRed, int novaPozicijaKolona, Figura[,] tabla) //na potencijalnom mestu
+        {
+            // privremeno premestimo kralja
+            Figura orgFigura = tabla[novaPozicijaRed, novaPozicijaKolona];
+            int orgRed = Red;
+            int orgKol = Kolona;
+            tabla[Red, Kolona] = null;
+            tabla[novaPozicijaRed, novaPozicijaKolona] = this;
+            tabla[novaPozicijaRed, novaPozicijaKolona].Red = novaPozicijaRed;
+            tabla[novaPozicijaRed, novaPozicijaKolona].Kolona = novaPozicijaKolona;
+
+            bool kraljUgrozen = DaLiJeKraljUgrozen(tabla);
+
+            // vratimo stanje table
+            tabla[novaPozicijaRed, novaPozicijaKolona] = orgFigura;
+            tabla[orgRed, orgKol] = this;
+            tabla[orgRed, orgKol].Red = orgRed;
+            tabla[orgRed, orgKol].Kolona = orgKol;
+
+            return !kraljUgrozen;
+        }
         public bool DaLiJeKraljUgrozen(Figura[,] tabla) // da li je kralj trenutno ugrozen
         {
+            List<Figura> preteceFigure = new List<Figura>(); 
+
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
                     Figura figura = tabla[i, j];
-                    if (figura != null && figura.Boja != this.Boja)
+                    if (figura != null && figura.Boja != this.Boja) 
                     {
                         if (figura.ValidanPotez(Red, Kolona, tabla))
                         {
-                            MainWindow.SetPretecaFigura(figura);
-                            return true;
+                            preteceFigure.Add(figura);
+
+                            if (Boja == "bela")
+                            {
+                                MainWindow.SetPretecaFigura(0, figura);
+                            }
+                            else
+                            {
+                                MainWindow.SetPretecaFigura(1, figura);
+                            }
                         }
                     }
                 }
             }
-            return false;
+
+            int brojPretecihFigura = preteceFigure.Count; 
+
+            if (brojPretecihFigura > 0)
+            {
+                if (Boja == "bela")
+                {
+                    MainWindow.SetUgrozenKralj(0, brojPretecihFigura);
+                }
+                else
+                {
+                    MainWindow.SetUgrozenKralj(1, brojPretecihFigura);
+                }
+
+                return true; //bar jedna ga ugrozava
+            }
+            else
+            {
+                if (Boja == "bela")
+                {
+                    MainWindow.SetUgrozenKralj(0, 0);
+                    MainWindow.SetPretecaFigura(0, null);
+                }
+                else
+                {
+                    MainWindow.SetUgrozenKralj(1, 0);
+                    MainWindow.SetPretecaFigura(1, null);
+                }
+
+                return false; //nije ugrozen
+            }
         }
+
 
         public bool ImaLiKraljSigurnoPolje(Figura[,] tabla) // da li su okolna polja slobodna
         {
@@ -117,27 +187,8 @@ namespace ChessGame.Models
                 {
                     if (tabla[r, k] == null || (tabla[r,k]!=null && tabla[r, k].Boja != this.Boja && !DaLiJeZasticenaProtFigura(tabla[r,k],tabla))) //slobodno polje ima ukoliko je prazno ili moze da pojede tu figuru
                     {
-                        // privremeno premestimo kralja
-                        Figura orgFigura = tabla[r, k];
-                        int orgRed = Red;
-                        int orgKol = Kolona;
-                        tabla[Red, Kolona] = null;
-                        tabla[r, k] = this;
-                        tabla[r, k].Red = r;
-                        tabla[r, k].Kolona = k;
-
-                        bool kraljUgrozen = DaLiJeKraljUgrozen(tabla);
-
-                        // vratimo stanje table
-                        tabla[r, k] = orgFigura;
-                        tabla[orgRed, orgKol] = this;
-                        tabla[orgRed,orgKol].Red=orgRed;
-                        tabla[orgRed, orgKol].Kolona = orgKol;
-
-                        if (!kraljUgrozen)
-                        {
+                        if (DaLiJeKraljSiguran(r, k, tabla))
                             return true;
-                        }
                     }
                 }
             }

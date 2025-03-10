@@ -21,12 +21,13 @@ namespace ChessGame
         private Figura[,] tablaFigura = new Figura[8, 8];
         private List<(int, int)> poslednjaObojenaPolja = new List<(int, int)>();
         private Figura poslednjaFigura = null; // poslednja izabrana
-        private List<(int,int)> poljaZaJelo=new List<(int, int)>();
-        private List<Figura> pojedeneFigure=new List<Figura>(); //lista figura za vracanje na tablu
+        private List<(int, int)> poljaZaJelo = new List<(int, int)>();
+        private List<Figura> pojedeneFigure = new List<Figura>(); //lista figura za vracanje na tablu
         private List<(int, int)> pozicijeKralja = new List<(int, int)> { (7, 4), (0, 4) }; //na prvom mestu beli, na drugom crni 
         private bool beliIgracNaRedu = true;
-        private static List<(int,int)> poslednjaPomerenaFigura= new List<(int, int)> { (-1, -1) }; //prethodna pozicija poslednje pomerene figure
-        private static Figura pretecaFigura= null; //pamtimo koja je figura dala sah kralju
+        private static List<(int, int)> poslednjaPomerenaFigura = new List<(int, int)> { (-1, -1) }; //prethodna pozicija poslednje pomerene figure
+        private static List<Figura> pretecaFigura = new List<Figura>() { null, null }; //pamtimo koja je figura dala sah kralju //na prvom mestu beli, na drugom crni
+        private static List<int> ugrozenKralj = new List<int>() { 0, 0 }; //pamtimo koliko njih ugrozava kralja //na prvom mestu beli, na drugom crni
         public MainWindow()
         {
             InitializeComponent();
@@ -127,11 +128,44 @@ namespace ChessGame
                 {
                     if (poslednjaFigura.ValidanPotez(red, kolona, tablaFigura))
                     {
+                        if (poslednjaFigura.Boja == "bela" && ugrozenKralj[0]>0) //ako ga napada 1 figura mozemo da pokusamo da zastitimo kralja, a ako ih ima vise, onda moramo da pomeramo kralja
+                        {
+                            if (poslednjaFigura is not Kralj && ugrozenKralj[0]==1 && !poslednjaFigura.ZastiticeKralja(red, kolona, tablaFigura, pozicijeKralja))
+                            {
+                                MessageBox.Show("Beli kralj mora biti zasticen!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
+                            else if (ugrozenKralj[0] > 1)
+                            {
+                                if (poslednjaFigura is not Kralj)
+                                {
+                                    MessageBox.Show("Beli kralj mora biti zasticen!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                    return;
+                                }
+                            }
+                        }
+                        else if (poslednjaFigura.Boja == "crna" && ugrozenKralj[1]>0)
+                        {
+                            if (poslednjaFigura is not Kralj && ugrozenKralj[1] == 1 && !poslednjaFigura.ZastiticeKralja(red, kolona, tablaFigura, pozicijeKralja))
+                            {
+                                MessageBox.Show("Crni kralj mora biti zasticen!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
+                            else if (ugrozenKralj[1] > 1)
+                            {
+                                if (poslednjaFigura is not Kralj)
+                                {
+                                    MessageBox.Show("Crni kralj mora biti zasticen!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                    return;
+                                }
+                            }
+                        }
                         if (!PremestiFiguru(red, kolona)) //mozemo pojesti sve figure osim kralja
                         {
                             MessageBox.Show("Ne mozete uzeti kralja!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return;
                         }
+                        
                         ResetujBoje();
                         ProveriStanjeIgre();
                         poljaZaJelo.Clear();
@@ -186,7 +220,38 @@ namespace ChessGame
                     //proveravamo da li je polje validno
                     if(poslednjaFigura.ValidanPotez(red,kolona,tablaFigura))
                     {
-
+                        if (poslednjaFigura.Boja == "bela" && ugrozenKralj[0] > 0)
+                        {
+                            if (poslednjaFigura is not Kralj && ugrozenKralj[0]==1 && !poslednjaFigura.ZastiticeKralja(red, kolona, tablaFigura, pozicijeKralja))
+                            {
+                                MessageBox.Show("Beli kralj mora biti zasticen!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
+                            else if (ugrozenKralj[0]>1)
+                            {
+                                if(poslednjaFigura is not Kralj)
+                                {
+                                    MessageBox.Show("Beli kralj mora biti zasticen!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                    return;
+                                }
+                            }
+                        }
+                        else if (poslednjaFigura.Boja == "crna" && ugrozenKralj[1]>0)
+                        {
+                            if (poslednjaFigura is not Kralj && ugrozenKralj[1] == 1 && !poslednjaFigura.ZastiticeKralja(red, kolona, tablaFigura, pozicijeKralja))
+                            {
+                                MessageBox.Show("Crni kralj mora biti zasticen!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                return;
+                            }
+                            else if (ugrozenKralj[1] > 1)
+                            {
+                                if (poslednjaFigura is not Kralj)
+                                {
+                                    MessageBox.Show("Crni kralj mora biti zasticen!", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                    return;
+                                }
+                            }
+                        }
                         PremestiFiguru(red, kolona);
                         ResetujBoje();
                         ProveriStanjeIgre();
@@ -397,9 +462,22 @@ namespace ChessGame
         {
             return poslednjaPomerenaFigura;
         }
-        public static void SetPretecaFigura(Figura f)
+        public static void SetPretecaFigura(int i,Figura f)
         {
-            pretecaFigura = f;
+            pretecaFigura[i]= f;
+        }
+        public static Figura GetPretecaFigura(int i)
+        {
+            return pretecaFigura[i];
+        }
+        public static void SetUgrozenKralj(int i, int ugrozen)
+        {
+            ugrozenKralj[i] = ugrozen;
+        }
+
+        public static int GetUgrozenKralj(int i)
+        {
+            return ugrozenKralj[i];
         }
     }
 }
