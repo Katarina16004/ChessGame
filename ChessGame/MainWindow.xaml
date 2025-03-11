@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChessGame"
         mc:Ignorable="d"
-        Title="Chess" Height="450" Width="450">
+        Title="Chess" Height="500" Width="450">
     <Grid x:Name="Tabla">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" ></ColumnDefinition>
@@ -16,8 +16,10 @@
             <ColumnDefinition Width="*" ></ColumnDefinition>
             <ColumnDefinition Width="*" ></ColumnDefinition>
             <ColumnDefinition Width="*" ></ColumnDefinition>
+            
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -64,5 +66,17 @@
         <Button Name="Button76" Grid.Row="7" Grid.Column="6" Background="#FFFC8EDF" Click="Button_Click"></Button>
         <Button Name="Button77" Grid.Row="7" Grid.Column="7" Background="white" Click="Button_Click"></Button>
 
+        <Border Grid.Row="8" Grid.ColumnSpan="8" BorderThickness="2" BorderBrush="#C031C7" >
+            <Grid x:Name="igrac">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" ></ColumnDefinition>
+                    <ColumnDefinition Width="*" ></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock FontSize="17" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0">Igrač na redu:</TextBlock>
+                <TextBlock Name="naRedu" Grid.Column="1" FontSize="17" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0">beli</TextBlock>
+            </Grid>
+           
+            
+        </Border>
     </Grid>
 </Window>

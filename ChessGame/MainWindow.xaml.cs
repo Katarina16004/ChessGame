@@ -153,6 +153,7 @@ namespace ChessGame
 
             PostaviPocetneFigure();
             PostaviSlikuNaDugme();
+            naRedu.Text = "beli";
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -222,19 +223,19 @@ namespace ChessGame
                         beliIgracNaRedu = !beliIgracNaRedu;
                         return;
                     }
-                }/*
+                }
                 if ((beliIgracNaRedu && polje.Boja == "bela") || (!beliIgracNaRedu && polje.Boja == "crna"))
                 {
                     poslednjaFigura = polje;
                 }
                 else
                 {
-                    MessageBox.Show("Nije tvoje vreme za potez!");
+                    //MessageBox.Show("Nije tvoje vreme za potez!");
                     return;
-                }*/
+                }
                 // prikazivanje moguceg kretanja
                 ResetujBoje();
-                 poslednjaFigura = polje;
+                 //poslednjaFigura = polje;
                 poslednjaObojenaPolja.Clear();
                 poslednjaFigura.Red = red;
                 poslednjaFigura.Kolona = kolona;
@@ -323,6 +324,7 @@ namespace ChessGame
                         }
                         poslednjaFigura = null;
                         beliIgracNaRedu = !beliIgracNaRedu;
+                        naRedu.Text = (beliIgracNaRedu==true) ? "beli" : "crni";
                     }
                 }
             }
@@ -505,7 +507,7 @@ namespace ChessGame
                     if (f.Boja == poslednjaFigura.Boja)
                         naseFigue.Add(f);
                 }
-                poljaZaJelo.Clear(); //PROVERITI KASNIJE
+                poljaZaJelo.Clear();
                 VratiFiguruWindow vratiFiguruWindow = new VratiFiguruWindow(naseFigue);
                 vratiFiguruWindow.ShowDialog();
                 poslednjaFigura=vratiFiguruWindow.odabranaFigura;
