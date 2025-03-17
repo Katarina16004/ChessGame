@@ -169,6 +169,12 @@ namespace ChessGame
                     {
                         return;
                     }
+                    else
+                    {
+                        //da li bi pomeranje te figure ugrozilo kralja
+                        if (poslednjaFigura is not Kralj && UgrozavaKralja(poslednjaFigura, red, kolona))
+                            return;
+                    }
 
                     if (!PremestiFiguru(red, kolona)) //mozemo pojesti sve figure osim kralja
                     {
@@ -193,7 +199,8 @@ namespace ChessGame
                     beliIgracNaRedu = !beliIgracNaRedu;
                     naRedu.Text = (beliIgracNaRedu == true) ? "beli" : "crni";
                     return;
-                }/*
+                }
+                /*
                 if ((beliIgracNaRedu && polje.Boja == "bela") || (!beliIgracNaRedu && polje.Boja == "crna"))
                 {
                     poslednjaFigura = polje;
@@ -238,6 +245,12 @@ namespace ChessGame
                         {
                             return;
                         }
+                        else
+                        {
+                            //da li bi pomeranje te figure ugrozilo kralja
+                            if (poslednjaFigura is not Kralj && UgrozavaKralja(poslednjaFigura, red, kolona))
+                                return;
+                        }
 
                         PremestiFiguru(red, kolona);
                         ResetujBoje();
@@ -258,6 +271,34 @@ namespace ChessGame
                     }
                 }
             }
+        }
+        private bool UgrozavaKralja(Figura figura, int red, int kolona)
+        {
+            //privremeno pomerimo figuru
+            int orgRed = figura.Red;
+            int orgKol = figura.Kolona;
+            tablaFigura[orgRed, orgKol] = null;
+            tablaFigura[red, kolona] = figura;
+            tablaFigura[red, kolona].Red = red;
+            tablaFigura[red, kolona].Kolona = kolona;
+
+            int index = figura.Boja == "bela" ? 0 : 1;
+            Kralj kralj =new Kralj(figura.Boja,pozicijeKralja[index].Item1, pozicijeKralja[index].Item2); //sigurno je tu kralj
+            bool ugrozen = kralj.DaLiJeKraljUgrozen(tablaFigura);
+
+            //vracamo originalno stanje table
+            tablaFigura[red, kolona] = null;
+            tablaFigura[orgRed, orgKol] = figura;
+            tablaFigura[orgRed, orgKol].Red = orgRed;
+            tablaFigura[orgRed, orgKol].Kolona = orgKol;
+            if (ugrozen)
+            {
+                pretecaFigura[index] = null; //funkcija kralja ce nam ovo promeniti, pa moramo da vratimo na staro
+                ugrozenKralj[index] = 0;
+                MessageBox.Show("Ugrozili biste kralja", "Nevazeci potez", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return true;
+            }
+            return false;
         }
         private bool KraljZasticen(Figura figura, int red, int kolona)
         {
