@@ -200,7 +200,7 @@ namespace ChessGame
                     naRedu.Text = (beliIgracNaRedu == true) ? "beli" : "crni";
                     return;
                 }
-                /*
+                
                 if ((beliIgracNaRedu && polje.Boja == "bela") || (!beliIgracNaRedu && polje.Boja == "crna"))
                 {
                     poslednjaFigura = polje;
@@ -209,11 +209,11 @@ namespace ChessGame
                 {
                     //MessageBox.Show("Nije tvoje vreme za potez!");
                     return;
-                }*/
+                }
 
                 // prikazivanje moguceg kretanja
                 ResetujBoje();
-                 poslednjaFigura = polje;
+                // poslednjaFigura = polje;
                 poslednjaObojenaPolja.Clear();
                 poslednjaFigura.Red = red;
                 poslednjaFigura.Kolona = kolona;
